@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyYoma - Official Website</title>
+    <!-- Load Tailwind CSS from CDN for easy setup -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font import for a modern look */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Light gray background */
+        }
+        /* Custom styling for the images/videos on hover */
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.15);
+        }
+        /* Aspect Ratio for responsive videos */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 0.75rem; /* Matches Tailwind rounded-xl */
+        }
+        .video-container iframe { /* Targets the iframe element */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body class="min-h-screen antialiased">
+
+    <!-- Header / Navigation Bar -->
+    <header class="bg-white shadow-sm sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-indigo-600">MyYoma</h1>
+            <nav class="hidden md:block">
+                <a href="#about" class="text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-md font-medium transition duration-150">About</a>
+                <a href="#process-videos" class="text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-md font-medium transition duration-150">Videos</a>
+                <a href="#product-views" class="text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-md font-medium transition duration-150">Product Shots</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- Hero Section: Business Text & Contact Info -->
+        <section id="about" class="text-center mb-16 bg-white p-8 rounded-xl shadow-lg">
+            <h2 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4">Pure Hydration, Delivered to You</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                We are a passionate, locally-owned company dedicated to delivering exceptional value and service. Our commitment to excellence, sustainable practices, and customer satisfaction is at the heart of everything we do. We strive to be the best in the industry, making every project a testament to our dedication.
+            </p>
+            <div class="mt-8">
+                <!-- Contact Button Updated -->
+                <a href="mailto:vikas.yoma@gmail.com" class="inline-block bg-indigo-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition duration-300">
+                    Enquire Now
+                </a>
+            </div>
+            <!-- New Contact Details Added -->
+            <p class="text-md text-gray-500 mt-4">
+                For enquiries, please contact us:
+                <br>
+                <strong>Phone:</strong> <a href="tel:+919209070907" class="text-indigo-600 hover:underline">9209070907</a> | 
+                <strong>Email:</strong> <a href="mailto:vikas.yoma@gmail.com" class="text-indigo-600 hover:underline">vikas.yoma@gmail.com</a>
+            </p>
+        </section>
+
+        <!-- --- Video Showcase Section --- -->
+        <section id="process-videos" class="pt-12 mb-16">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8 border-b-2 border-indigo-600 pb-2 text-center">See Our Process in Action</h2>
+            <p class="text-lg text-gray-600 max-w-4xl mx-auto mb-10 text-center">
+                Watch the full journey from purification to final packaging, highlighting our commitment to hygienic standards and pure quality.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- Video Card 1: Manufacturing (using YouTube Embed) -->
+                <div class="card bg-white p-4 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3 text-center">Manufacturing & Purification</h3>
+                    <div class="video-container">
+                        <!-- 
+                            *** ACTION REQUIRED: REPLACE PLACEHOLDER URLS BELOW ***
+                            1. Get the YouTube embed code for your Manufacturing video.
+                            2. Replace the 'src' attribute value (https://www.youtube.com/embed/placeholder) with your video's embed URL.
+                        -->
+                        <iframe 
+                            src="https://www.youtube.com/shorts/bnqd5Bbi2OQ" 
+                            title="YouTube video player" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <p class="text-gray-500 text-sm mt-3 text-center">Witness the rigorous quality control and multi-stage purification process that guarantees MyYoma's purity.</p>
+                </div>
+
+                <!-- Video Card 2: Packing (using YouTube Embed) -->
+                <div class="card bg-white p-4 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3 text-center">Automated Packing & Sealing</h3>
+                    <div class="video-container">
+                        <!-- 
+                            *** ACTION REQUIRED: REPLACE PLACEHOLDER URLS BELOW ***
+                            1. Get the YouTube embed code for your Packing video.
+                            2. Replace the 'src' attribute value (https://www.youtube.com/embed/placeholder) with your video's embed URL.
+                        -->
+                         <iframe 
+                            src="https://www.youtube.com/shorts/5YL0n6qeXSA" 
+                            title="YouTube video player" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <p class="text-gray-500 text-sm mt-3 text-center">The final stage: automated, hygienic bottling and tamper-proof sealing, ready for dispatch.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- --- Product Views & Logo Gallery --- -->
+        <section id="product-views" class="pt-12">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8 border-b-2 border-indigo-600 pb-2 text-center">Detailed Views & Branding</h2>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                
+                <!-- 5 Bottle Images (PNG format) -->
+                
+                <div class="card bg-white rounded-lg shadow-md overflow-hidden p-2 text-center">
+                    <img src="./images/bottle-top.png" alt="MyYoma bottle top view" class="w-full h-auto object-cover rounded-md aspect-square">
+                    <p class="text-xs text-gray-600 mt-2 font-semibold">Bottle Top</p>
+                </div>
+                
+                <div class="card bg-white rounded-lg shadow-md overflow-hidden p-2 text-center">
+                    <img src="./images/bottle-bottom.png" alt="MyYoma bottle bottom view" class="w-full h-auto object-cover rounded-md aspect-square">
+                    <p class="text-xs text-gray-600 mt-2 font-semibold">Bottle Bottom</p>
+                </div>
+
+                <div class="card bg-white rounded-lg shadow-md overflow-hidden p-2 text-center">
+                    <img src="./images/bottle-side1.png" alt="MyYoma bottle side view 1" class="w-full h-auto object-cover rounded-md aspect-square">
+                    <p class="text-xs text-gray-600 mt-2 font-semibold">Side View (500ml)</p>
+                </div>
+
+                <div class="card bg-white rounded-lg shadow-md overflow-hidden p-2 text-center">
+                    <img src="./images/bottle-side2.png" alt="MyYoma bottle side view 2" class="w-full h-auto object-cover rounded-md aspect-square">
+                    <p class="text-xs text-gray-600 mt-2 font-semibold">Side View (1L)</p>
+                </div>
+
+                <div class="card bg-white rounded-lg shadow-md overflow-hidden p-2 text-center">
+                    <img src="./images/bottle-full.png" alt="MyYoma full bottle profile" class="w-full h-auto object-cover rounded-md aspect-square">
+                    <p class="text-xs text-gray-600 mt-2 font-semibold">Full Profile</p>
+                </div>
+                
+                <!-- 2 Logo Images (JPG format - CONFIRMED) -->
+
+                <div class="card bg-white rounded-lg shadow-md overflow-hidden p-2 text-center col-span-1">
+                    <img src="./images/logo-primary.jpg" alt="MyYoma primary logo" class="w-full h-auto object-contain rounded-md aspect-square">
+                    <p class="text-xs text-gray-600 mt-2 font-semibold">Primary Logo</p>
+                </div>
+                
+                <div class="card bg-white rounded-lg shadow-md overflow-hidden p-2 text-center col-span-1">
+                    <img src="./images/logo-secondary.jpg" alt="MyYoma secondary logo" class="w-full h-auto object-contain rounded-md aspect-square">
+                    <p class="text-xs text-gray-600 mt-2 font-semibold">Secondary Logo</p>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
+            <p class="text-gray-400 text-sm">
+                &copy; 2025 MyYoma. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
