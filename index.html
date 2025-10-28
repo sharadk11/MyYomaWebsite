@@ -162,16 +162,23 @@
   </footer>
 
   <!-- Visitor Counter Script -->
-  <script>
-    fetch('https://api.countapi.xyz/hit/myyomawebsite.com/visits')
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById('visitor-counter').innerText = `Visitors: ${data.value}`;
-      })
-      .catch(err => console.log(err));
-  </script>
+
+  <div id="visitor-count">Visitors: 0</div>
+
+<script>
+  // Get the current count from localStorage
+  let count = localStorage.getItem('visitorCount') || 0;
+  count = parseInt(count) + 1;
+  
+  // Save back to localStorage
+  localStorage.setItem('visitorCount', count);
+
+  // Update HTML
+  document.getElementById('visitor-count').innerText = "Visits: " + count;
+</script>
 
 </body>
 </html>
+
 
 
