@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
   <!-- Firebase SDK for Realtime Database -->
-<script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-database.js"></script>
+<!-- Firebase SDK (Compat version for browser) -->
+<script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-database-compat.js"></script>
+
 <script>
   const firebaseConfig = {
     apiKey: "AIzaSyDm8CvP7YfzY4swkf7cSC8C7cBLeNS-UNM",
@@ -15,9 +17,10 @@
     appId: "1:671626600079:web:1a31419f10d81a38375afa"
   };
 
-  const app = firebase.initializeApp(firebaseConfig);
+  firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 </script>
+
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -217,6 +220,7 @@
 
 </body>
 </html>
+
 
 
 
