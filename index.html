@@ -1,28 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Firebase SDK for Realtime Database -->
-<script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-database.js"></script>
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyDm8CvP7YfzY4swkf7cSC8C7cBLeNS-UNM",
-    authDomain: "myyoma-visitors-count.firebaseapp.com",
-    databaseURL: "https://myyoma-visitors-count-default-rtdb.asia-south1.firebasedatabase.app",
-    projectId: "myyoma-visitors-count",
-    storageBucket: "myyoma-visitors-count.appspot.com",
-    messagingSenderId: "671626600079",
-    appId: "1:671626600079:web:1a31419f10d81a38375afa"
-  };
-
-  const app = firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
-</script>
-
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Yoma - Official Website</title>
+
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-database.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDm8CvP7YfzY4swkf7cSC8C7cBLeNS-UNM",
+      authDomain: "myyoma-visitors-count.firebaseapp.com",
+      databaseURL: "https://myyoma-visitors-count-default-rtdb.asia-south1.firebasedatabase.app",
+      projectId: "myyoma-visitors-count",
+      storageBucket: "myyoma-visitors-count.appspot.com",
+      messagingSenderId: "671626600079",
+      appId: "1:671626600079:web:1a31419f10d81a38375afa"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+  </script>
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
     body {
@@ -58,7 +62,6 @@
   </style>
 </head>
 <body class="min-h-screen antialiased">
-
   <!-- Header -->
   <header class="bg-white shadow-sm sticky top-0 z-10 backdrop-blur-md bg-opacity-80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
@@ -164,61 +167,41 @@
   </main>
 
   <!-- Footer -->
-  <footer class="bg-gray-800 mt-12">
+   <footer class="bg-gray-800 mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center flex flex-col sm:flex-row justify-between items-center gap-4">
       <p class="text-gray-400 text-sm">&copy; 2025 Yoma. All rights reserved.</p>
       <div id="visitor-counter" class="text-gray-200 text-sm font-semibold">Visitors: 0</div>
     </div>
   </footer>
 
-  <!-- Visitor Counter Script -->
-
-  <div id="visitor-count">Visitors: 0</div>
-
-
-</script>
-
+  <!-- Smooth Scroll Script -->
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@latest/bundled/lenis.min.js"></script>
-<script>
-  const lenis = new Lenis({
-    duration: 1.2,  // control scroll smoothness
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // easing curve
-  });
-
-  function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-  }
-
-  requestAnimationFrame(raf);
-</script>
   <script>
-  const lenis = new Lenis()
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    });
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+  </script>
 
-  function raf(time) {
-    lenis.raf(time)
-    requestAnimationFrame(raf)
-  }
+  <!-- Visitor Counter Script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const counterRef = db.ref("siteStats/visitorCount");
 
-  requestAnimationFrame(raf)
-</script>
-<script>
-  const counterRef = db.ref("siteStats/visitorCount");
+      counterRef.transaction((currentCount) => {
+        return (currentCount || 0) + 1;
+      });
 
-  counterRef.transaction((currentCount) => {
-    return (currentCount || 0) + 1;
-  });
-
-  counterRef.on("value", (snapshot) => {
-    const count = snapshot.val();
-    document.getElementById("visitor-counter").innerText = "Visitors: " + count;
-  });
-</script>
-
+      counterRef.on("value", (snapshot) => {
+        const count = snapshot.val();
+        document.getElementById("visitor-counter").innerText = "Visitors: " + count;
+      });
+    });
+  </script>
 </body>
 </html>
-
-
-
-
-
