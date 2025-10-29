@@ -1,6 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Firebase SDK for Realtime Database -->
+<script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-database.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDm8CvP7YfzY4swkf7cSC8C7cBLeNS-UNM",
+    authDomain: "myyoma-visitors-count.firebaseapp.com",
+    databaseURL: "https://myyoma-visitors-count-default-rtdb.asia-south1.firebasedatabase.app",
+    projectId: "myyoma-visitors-count",
+    storageBucket: "myyoma-visitors-count.appspot.com",
+    messagingSenderId: "671626600079",
+    appId: "1:671626600079:web:1a31419f10d81a38375afa"
+  };
+
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+</script>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Yoma - Official Website</title>
@@ -157,16 +175,7 @@
 
   <div id="visitor-count">Visitors: 0</div>
 
-<script>
-  // Get the current count from localStorage
-  let count = localStorage.getItem('visitorCount') || 0;
-  count = parseInt(count) + 1;
-  
-  // Save back to localStorage
-  localStorage.setItem('visitorCount', count);
 
-  // Update HTML
-  document.getElementById('visitor-count').innerText = "Visits: " + count;
 </script>
 
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@latest/bundled/lenis.min.js"></script>
@@ -193,9 +202,22 @@
 
   requestAnimationFrame(raf)
 </script>
+<script>
+  const counterRef = db.ref("siteStats/visitorCount");
+
+  counterRef.transaction((currentCount) => {
+    return (currentCount || 0) + 1;
+  });
+
+  counterRef.on("value", (snapshot) => {
+    const count = snapshot.val();
+    document.getElementById("visitor-counter").innerText = "Visitors: " + count;
+  });
+</script>
 
 </body>
 </html>
+
 
 
 
