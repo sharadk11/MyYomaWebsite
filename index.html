@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Yoma - Official Website</title>
+
+  <!-- Google Analytics 4 / Firebase Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-E66Y6R0RKM"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-E66Y6R0RKM');
+  </script>
+
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
@@ -233,14 +243,37 @@
           // Fail fast if the host can't be reached/resolved.
           await withTimeout(counterRef.once("value"), 3500);
 
+          // Always listen for live updates so the number stays in sync.
           counterRef.on("value", (snapshot) => {
             const count = snapshot.val() ?? 0;
             el.textContent = "Visitors: " + count;
           });
 
-          counterRef.transaction((currentCount) => (currentCount || 0) + 1).catch((e) => {
-            console.warn("[visitor-counter] Increment failed:", e);
-          });
+          // Only increment once per browser session (per tab group / window).
+          // A "session" ends when the browser is fully closed. Refreshes and new tabs reuse the same session.
+          let shouldIncrement = true;
+          const SESSION_KEY = "yomaVisitorIncremented";
+
+          try {
+            if (typeof sessionStorage !== "undefined") {
+              const already = sessionStorage.getItem(SESSION_KEY);
+              if (already === "1") {
+                shouldIncrement = false;
+              } else {
+                sessionStorage.setItem(SESSION_KEY, "1");
+              }
+            }
+          } catch (e) {
+            console.warn("[visitor-counter] sessionStorage unavailable, falling back to always increment.", e);
+          }
+
+          if (shouldIncrement) {
+            counterRef
+              .transaction((currentCount) => (currentCount || 0) + 1)
+              .catch((e) => {
+                console.warn("[visitor-counter] Increment failed:", e);
+              });
+          }
 
           return; // success
         } catch (e) {
