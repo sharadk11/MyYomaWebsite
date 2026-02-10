@@ -249,22 +249,21 @@
             el.textContent = "Visitors: " + count;
           });
 
-          // Only increment once per browser session (per tab group / window).
-          // A "session" ends when the browser is fully closed. Refreshes and new tabs reuse the same session.
+          // Only increment once per browser/device (until browser data is cleared).
           let shouldIncrement = true;
-          const SESSION_KEY = "yomaVisitorIncremented";
+          const STORAGE_KEY = "yomaVisitorEverIncremented";
 
           try {
-            if (typeof sessionStorage !== "undefined") {
-              const already = sessionStorage.getItem(SESSION_KEY);
+            if (typeof localStorage !== "undefined") {
+              const already = localStorage.getItem(STORAGE_KEY);
               if (already === "1") {
                 shouldIncrement = false;
               } else {
-                sessionStorage.setItem(SESSION_KEY, "1");
+                localStorage.setItem(STORAGE_KEY, "1");
               }
             }
           } catch (e) {
-            console.warn("[visitor-counter] sessionStorage unavailable, falling back to always increment.", e);
+            console.warn("[visitor-counter] localStorage unavailable, falling back to always increment.", e);
           }
 
           if (shouldIncrement) {
@@ -295,10 +294,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
