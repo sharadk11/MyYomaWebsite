@@ -1,33 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Yoma - Official Website</title>
-
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Firebase SDK -->
-  <!-- Firebase SDK (Compat version for browser) -->
-<script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-database-compat.js"></script>
-
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyDm8CvP7YfzY4swkf7cSC8C7cBLeNS-UNM",
-    authDomain: "myyoma-visitors-count.firebaseapp.com",
-    databaseURL: "https://myyoma-visitors-count-default-rtdb.asia-south1.firebasedatabase.app",
-    projectId: "myyoma-visitors-count",
-    storageBucket: "myyoma-visitors-count.appspot.com",
-    messagingSenderId: "671626600079",
-    appId: "1:671626600079:web:1a31419f10d81a38375afa"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
-</script>
-
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
     body {
@@ -63,6 +40,7 @@
   </style>
 </head>
 <body class="min-h-screen antialiased">
+
   <!-- Header -->
   <header class="bg-white shadow-sm sticky top-0 z-10 backdrop-blur-md bg-opacity-80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
@@ -168,41 +146,127 @@
   </main>
 
   <!-- Footer -->
-   <footer class="bg-gray-800 mt-12">
+  <footer class="bg-gray-800 mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center flex flex-col sm:flex-row justify-between items-center gap-4">
       <p class="text-gray-400 text-sm">&copy; 2025 Yoma. All rights reserved.</p>
       <div id="visitor-counter" class="text-gray-200 text-sm font-semibold">Visitors: 0</div>
     </div>
   </footer>
 
-  <!-- Smooth Scroll Script -->
+  <!-- Smooth scroll (non-blocking at end of body) -->
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@latest/bundled/lenis.min.js"></script>
   <script>
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      duration: 1.2,  // control scroll smoothness
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // easing curve
     });
+
     function raf(time) {
       lenis.raf(time);
       requestAnimationFrame(raf);
     }
+
     requestAnimationFrame(raf);
   </script>
 
   <!-- Visitor Counter Script -->
+  <!-- Firebase SDK (Compat version for browser) -->
+  <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-database-compat.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const counterRef = db.ref("siteStats/visitorCount");
+    // NOTE: If you see net::ERR_NAME_NOT_RESOLVED in console, the browser can't resolve the database host.
+    // This script fails fast + falls back, so the site doesn't slow down from infinite reconnect attempts.
+    const firebaseConfigBase = {
+      apiKey: "AIzaSyDm8CvP7YfzY4swkf7cSC8C7cBLeNS-UNM",
+      authDomain: "myyoma-visitors-count.firebaseapp.com",
+      projectId: "myyoma-visitors-count",
+      storageBucket: "myyoma-visitors-count.appspot.com",
+      messagingSenderId: "671626600079",
+      appId: "1:671626600079:web:1a31419f10d81a38375afa",
+    };
 
-      counterRef.transaction((currentCount) => {
-        return (currentCount || 0) + 1;
-      });
+    // Primary URL from Firebase console (regional). Fallback uses the legacy firebaseio.com domain.
+    const RTDB_URLS = [
+      "https://myyoma-visitors-count-default-rtdb.asia-south1.firebasedatabase.app",
+      "https://myyoma-visitors-count-default-rtdb.firebaseio.com",
+    ];
 
-      counterRef.on("value", (snapshot) => {
-        const count = snapshot.val();
-        document.getElementById("visitor-counter").innerText = "Visitors: " + count;
+    function withTimeout(promise, ms) {
+      return new Promise((resolve, reject) => {
+        const t = setTimeout(() => reject(new Error("timeout")), ms);
+        Promise.resolve(promise).then(
+          (v) => {
+            clearTimeout(t);
+            resolve(v);
+          },
+          (e) => {
+            clearTimeout(t);
+            reject(e);
+          }
+        );
       });
-    });
+    }
+
+    async function startVisitorCounter() {
+      const el = document.getElementById("visitor-counter");
+      if (!el) return;
+
+      if (typeof firebase === "undefined") {
+        el.textContent = "Visitors: unavailable";
+        console.warn("[visitor-counter] Firebase SDK not loaded.");
+        return;
+      }
+
+      if (typeof navigator !== "undefined" && navigator.onLine === false) {
+        el.textContent = "Visitors: offline";
+        return;
+      }
+
+      for (let i = 0; i < RTDB_URLS.length; i++) {
+        const databaseURL = RTDB_URLS[i];
+        const appName = `visitorCounter-${i}`;
+
+        try {
+          const app = firebase.initializeApp({ ...firebaseConfigBase, databaseURL }, appName);
+          const db = firebase.database(app);
+          const counterRef = db.ref("siteStats/visitorCount");
+
+          // Fail fast if the host can't be reached/resolved.
+          await withTimeout(counterRef.once("value"), 3500);
+
+          counterRef.on("value", (snapshot) => {
+            const count = snapshot.val() ?? 0;
+            el.textContent = "Visitors: " + count;
+          });
+
+          counterRef.transaction((currentCount) => (currentCount || 0) + 1).catch((e) => {
+            console.warn("[visitor-counter] Increment failed:", e);
+          });
+
+          return; // success
+        } catch (e) {
+          console.warn(`[visitor-counter] Failed using databaseURL=${databaseURL}`, e);
+          try {
+            const oldApp = firebase.app(appName);
+            await oldApp.delete();
+          } catch (_) {
+            // ignore
+          }
+        }
+      }
+
+      el.textContent = "Visitors: unavailable";
+    }
+
+    startVisitorCounter();
   </script>
+
 </body>
 </html>
+
+
+
+
+
+
+
