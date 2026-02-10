@@ -175,37 +175,21 @@
   </footer>
 
   <!-- Visitor Counter Script -->
-
-  <div id="visitor-count">Visitors: 0</div>
-
-
-</script>
-
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@latest/bundled/lenis.min.js"></script>
-<script>
-  const lenis = new Lenis({
-    duration: 1.2,  // control scroll smoothness
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // easing curve
-  });
-
-  function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-  }
-
-  requestAnimationFrame(raf);
-</script>
   <script>
-  const lenis = new Lenis()
+    const lenis = new Lenis({
+      duration: 1.2,  // control scroll smoothness
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // easing curve
+    });
 
-  function raf(time) {
-    lenis.raf(time)
-    requestAnimationFrame(raf)
-  }
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
 
-  requestAnimationFrame(raf)
-</script>
-<script>
+    requestAnimationFrame(raf);
+  </script>
+  <script>
   const counterRef = db.ref("siteStats/visitorCount");
 
   counterRef.transaction((currentCount) => {
